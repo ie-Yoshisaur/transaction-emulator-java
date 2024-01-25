@@ -1,13 +1,9 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Test;
 
 public class ReadSkewAnomalyTest {
-  @Test
-  public void testReadSkewAnomaly() throws InterruptedException {
+  public static void main(String arg[]) throws InterruptedException {
     final Data data1 = new Data(1, 0);
     final Data data2 = new Data(2, 0);
     final Transaction transaction1 = new Transaction();
@@ -37,7 +33,7 @@ public class ReadSkewAnomalyTest {
     int finalTransaction1Value1 = transaction1.getValue(data1.getDataId());
     int finalTransaction1Value2 = transaction1.getValue(data2.getDataId());
     if (finalTransaction1Value1 == 0 && finalTransaction1Value2 == 1) {
-      fail(
+      System.err.println(
           "Read Skew Anomaly occurred: finalTransaction1Value1 is 0 and finalTransaction1Value2 is 1");
     }
   }

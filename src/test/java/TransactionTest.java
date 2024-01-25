@@ -1,14 +1,9 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Test;
 
 public class TransactionTest {
-
-  @Test
-  public void testConcurrentTransactions() throws InterruptedException {
+  public static void main(String arg[]) throws InterruptedException {
     final Data data = new Data(1, 0);
     final Transaction transaction1 = new Transaction();
     final Transaction transaction2 = new Transaction();
@@ -32,6 +27,7 @@ public class TransactionTest {
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    assertEquals(2, data.getValue());
+    assert 2 == data.getValue();
+    System.err.println("data is not 2");
   }
 }

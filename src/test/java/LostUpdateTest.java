@@ -32,9 +32,7 @@ public class LostUpdateTest {
 
     int finalDataValue = data.dataId;
     int finalTransactionValue = transaction1.values.get(data.dataId);
-    if (finalDataValue == 1 && finalTransactionValue == 42) {
-      System.err.println(
-          "Lost Update anomaly occurred: finalTransactionValue is 1 and finalTransactionValue is 42");
-    }
+    assert !(finalDataValue == 1 && finalTransactionValue == 42)
+        : "Lost Update anomaly occurred: finalTransactionValue is 1 and finalTransactionValue is 42";
   }
 }

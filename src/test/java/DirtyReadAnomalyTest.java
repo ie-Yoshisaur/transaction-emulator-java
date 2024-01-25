@@ -27,9 +27,7 @@ public class DirtyReadAnomalyTest {
 
     int finalDataValue = data.value;
     int finalTransaction1Value = transaction1.values.get(data.dataId);
-    if (finalDataValue == 0 && finalTransaction1Value == 1) {
-      System.err.println(
-          "Dirty Read Anomaly occurred: data.getValue() is 0 and transaction1.getValue() is 1");
-    }
+    assert !(finalDataValue == 0 && finalTransaction1Value == 1)
+        : "Dirty Read Anomaly occurred: data.getValue() is 0 and transaction1.getValue() is 1";
   }
 }

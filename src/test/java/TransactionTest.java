@@ -30,8 +30,6 @@ public class TransactionTest {
     thread1.join();
     thread2.join();
 
-    if (data.value != 2) {
-      System.err.println("data is not 2");
-    }
+    assert data.value == 2 : "data is not 2";
   }
 }

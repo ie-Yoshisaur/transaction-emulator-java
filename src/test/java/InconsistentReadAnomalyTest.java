@@ -28,9 +28,7 @@ public class InconsistentReadAnomalyTest {
 
     int initialValue = transaction1.initialState.get(data.dataId);
     int finalTransactionValue = transaction1.values.get(data.dataId);
-    if (initialValue == 0 && finalTransactionValue == 1) {
-      System.err.println(
-          "Inconsistent Read anomaly occurred: initialValue is 0 and finalTransactionValue is 1");
-    }
+    assert !(initialValue == 0 && finalTransactionValue == 1)
+        : "Inconsistent Read anomaly occurred: initialValue is 0 and finalTransactionValue is 1";
   }
 }

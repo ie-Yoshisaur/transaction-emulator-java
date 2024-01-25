@@ -35,9 +35,7 @@ public class ReadSkewAnomalyTest {
 
     int finalTransaction1Value1 = transaction1.values.get(data1.dataId);
     int finalTransaction1Value2 = transaction1.values.get(data2.dataId);
-    if (finalTransaction1Value1 == 0 && finalTransaction1Value2 == 1) {
-      System.err.println(
-          "Read Skew Anomaly occurred: finalTransaction1Value1 is 0 and finalTransaction1Value2 is 1");
-    }
+    assert !(finalTransaction1Value1 == 0 && finalTransaction1Value2 == 1)
+        : "Read Skew Anomaly occurred: finalTransaction1Value1 is 0 and finalTransaction1Value2 is 1";
   }
 }

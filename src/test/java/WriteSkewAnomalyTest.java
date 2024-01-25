@@ -35,9 +35,7 @@ public class WriteSkewAnomalyTest {
 
     int finalTransaction1Value1 = transaction1.values.get(data1.dataId);
     int finalTransaction1Value2 = transaction1.values.get(data2.dataId);
-    if (finalTransaction1Value1 == 1 && finalTransaction1Value2 == 1) {
-      System.err.println(
-          "Write Skew Anomaly occurred: finalTransaction1Value1 is 1 and finalTransaction1Value2 is 1");
-    }
+    assert !(finalTransaction1Value1 == 1 && finalTransaction1Value2 == 1)
+        : "Write Skew Anomaly occurred: finalTransaction1Value1 is 1 and finalTransaction1Value2 is 1";
   }
 }

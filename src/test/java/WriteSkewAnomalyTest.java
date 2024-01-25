@@ -8,10 +8,7 @@ public class WriteSkewAnomalyTest {
     Thread thread1 = new Thread(() -> {
       transaction1.read(data1);
       transaction1.read(data2);
-      int value = 0;
-      if (transaction1.values.containsKey(data1.dataId)) {
-        value = transaction1.values.get(data1.dataId);
-      }
+      int value = transaction1.values.get(data1.dataId);
       transaction1.write(data2.dataId, value + 1);
       transaction1.commit();
     });
@@ -19,10 +16,7 @@ public class WriteSkewAnomalyTest {
     Thread thread2 = new Thread(() -> {
       transaction2.read(data2);
       transaction2.read(data1);
-      int value = 0;
-      if (transaction2.values.containsKey(data2.dataId)) {
-        value = transaction2.values.get(data2.dataId);
-      }
+      int value = transaction2.values.get(data2.dataId);
       transaction2.write(data1.dataId, value + 1);
       transaction2.commit();
     });
@@ -33,9 +27,9 @@ public class WriteSkewAnomalyTest {
     thread1.join();
     thread2.join();
 
-    int finalTransaction1Value1 = transaction1.values.get(data1.dataId);
-    int finalTransaction1Value2 = transaction1.values.get(data2.dataId);
-    assert !(finalTransaction1Value1 == 1 && finalTransaction1Value2 == 1)
+    int finalData1 = data1.value;
+    int finalData2 = data2.value;
+    assert !(finalData1 == 1 && finalData2 == 1)
         : "Write Skew Anomaly occurred: finalTransaction1Value1 is 1 and finalTransaction1Value2 is 1";
   }
 }

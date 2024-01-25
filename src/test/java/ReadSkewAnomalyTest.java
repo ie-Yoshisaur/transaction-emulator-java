@@ -1,7 +1,3 @@
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 public class ReadSkewAnomalyTest {
   public static void main(String arg[]) throws InterruptedException {
     final Data data1 = new Data(1, 0);
@@ -9,26 +5,33 @@ public class ReadSkewAnomalyTest {
     final Transaction transaction1 = new Transaction();
     final Transaction transaction2 = new Transaction();
 
-    ExecutorService threadPool = Executors.newFixedThreadPool(2);
-
-    threadPool.submit(() -> {
+    Thread thread1 = new Thread(() -> {
       transaction1.read(data1);
       transaction1.read(data2);
       transaction1.commit();
     });
 
-    threadPool.submit(() -> {
+    Thread thread2 = new Thread(() -> {
       transaction2.read(data1);
-      int value1 = transaction2.values.get(data1.dataId);
+      int value1 = 0;
+      if (transaction2.values.containsKey(data1.dataId)) {
+        value1 = transaction2.values.get(data1.dataId);
+      }
       transaction2.read(data2);
       transaction2.write(data1.dataId, value1 + 1);
-      int value2 = transaction2.values.get(data2.dataId);
+      int value2 = 0;
+      if (transaction2.values.containsKey(data2.dataId)) {
+        value2 = transaction2.values.get(data2.dataId);
+      }
       transaction2.write(data2.dataId, value2 + 1);
       transaction2.rollback();
     });
 
-    threadPool.shutdown();
-    threadPool.awaitTermination(1, TimeUnit.MINUTES);
+    thread1.start();
+    thread2.start();
+
+    thread1.join();
+    thread2.join();
 
     int finalTransaction1Value1 = transaction1.values.get(data1.dataId);
     int finalTransaction1Value2 = transaction1.values.get(data2.dataId);

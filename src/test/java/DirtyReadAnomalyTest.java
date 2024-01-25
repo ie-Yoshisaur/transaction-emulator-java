@@ -21,17 +21,14 @@ public class DirtyReadAnomalyTest {
 
     threadPool.submit(() -> {
       transaction2.read(data);
-      int currentValue = transaction2.getValue(data.getDataId());
-      transaction2.write(data.getDataId(), currentValue + 1);
-      // When transaction1 reads data at this point, a Dirty Read Anomaly may
-      // occur
-      transaction2.rollback(); // The data value will be rolled back to 0
+      int value = transaction2.getValue(data.getDataId());
+      transaction2.write(data.getDataId(), value + 1);
+      transaction2.rollback();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    // Check if Dirty Read Anomaly occurred
     int finalDataValue = data.getValue();
     int finalTransaction1Value = transaction1.getValue(data.getDataId());
     if (finalDataValue == 0 && finalTransaction1Value == 1) {

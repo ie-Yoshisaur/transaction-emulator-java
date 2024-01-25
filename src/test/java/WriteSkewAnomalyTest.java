@@ -30,6 +30,6 @@ public class WriteSkewAnomalyTest {
     int finalData1 = data1.value;
     int finalData2 = data2.value;
     assert !(finalData1 == 1 && finalData2 == 1)
-        : "Write Skew Anomaly occurred: finalTransaction1Value1 is 1 and finalTransaction1Value2 is 1";
+        : "Write Skew Anomaly occurred: finalData1 is 1 and finalData2 is 1";
   }
 }

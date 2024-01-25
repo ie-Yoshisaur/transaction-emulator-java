@@ -25,7 +25,7 @@ public class TransactionTest {
     threadPool.submit(() -> {
       transaction2.read(data);
       int currentValue = transaction2.getValue(data.getDataId());
-      transaction1.write(data.getDataId(), currentValue + 1);
+      transaction2.write(data.getDataId(), currentValue + 1);
       transaction2.commit();
     });
 

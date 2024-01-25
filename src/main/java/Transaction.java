@@ -18,7 +18,7 @@ public class Transaction {
     if (!this.isCheckpointSet) {
       int dataId = data.dataId;
       this.dataMap.put(dataId, data);
-      int value = data.dataId;
+      int value = data.value;
       this.values.put(dataId, value);
       if (!this.initialState.containsKey(dataId)) {
         this.initialState.put(dataId, value);
@@ -49,7 +49,5 @@ public class Transaction {
     isCheckpointSet = true;
   }
 
-  public void commit() {
-    isCheckpointSet = true;
-  }
+  public void commit() { isCheckpointSet = true; }
 }

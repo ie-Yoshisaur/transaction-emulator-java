@@ -14,24 +14,24 @@ public class WriteSkewAnomalyTest {
     threadPool.submit(() -> {
       transaction1.read(data1);
       transaction1.read(data2);
-      int value = transaction1.getValue(data1.getDataId());
-      transaction1.write(data2.getDataId(), value + 1);
+      int value = transaction1.values.get(data1.dataId);
+      transaction1.write(data2.dataId, value + 1);
       transaction1.commit();
     });
 
     threadPool.submit(() -> {
       transaction2.read(data2);
       transaction2.read(data1);
-      int value = transaction2.getValue(data2.getDataId());
-      transaction2.write(data1.getDataId(), value + 1);
+      int value = transaction2.values.get(data2.dataId);
+      transaction2.write(data1.dataId, value + 1);
       transaction2.commit();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    int finalTransaction1Value1 = transaction1.getValue(data1.getDataId());
-    int finalTransaction1Value2 = transaction1.getValue(data2.getDataId());
+    int finalTransaction1Value1 = transaction1.values.get(data1.dataId);
+    int finalTransaction1Value2 = transaction1.values.get(data2.dataId);
     if (finalTransaction1Value1 == 1 && finalTransaction1Value2 == 1) {
       System.err.println(
           "Write Skew Anomaly occurred: finalTransaction1Value1 is 1 and finalTransaction1Value2 is 1");

@@ -17,16 +17,16 @@ public class DirtyReadAnomalyTest {
 
     threadPool.submit(() -> {
       transaction2.read(data);
-      int value = transaction2.getValue(data.getDataId());
-      transaction2.write(data.getDataId(), value + 1);
+      int value = transaction2.values.get(data.dataId);
+      transaction2.write(data.dataId, value + 1);
       transaction2.rollback();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    int finalDataValue = data.getValue();
-    int finalTransaction1Value = transaction1.getValue(data.getDataId());
+    int finalDataValue = data.value;
+    int finalTransaction1Value = transaction1.values.get(data.value);
     if (finalDataValue == 0 && finalTransaction1Value == 1) {
       System.err.println(
           "Dirty Read Anomaly occurred: data.getValue() is 0 and transaction1.getValue() is 1");

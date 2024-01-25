@@ -12,23 +12,23 @@ public class LostUpdateTest {
 
     threadPool.submit(() -> {
       transaction1.read(data);
-      int value = transaction1.getValue(data.getDataId());
-      transaction1.write(data.getDataId(), value + 42);
+      int value = transaction1.values.get(data.dataId);
+      transaction1.write(data.dataId, value + 42);
       transaction1.commit();
     });
 
     threadPool.submit(() -> {
       transaction2.read(data);
-      int value = transaction2.getValue(data.getDataId());
-      transaction2.write(data.getDataId(), value + 1);
+      int value = transaction2.values.get(data.dataId);
+      transaction2.write(data.dataId, value + 1);
       transaction2.commit();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    int finalDataValue = data.getValue();
-    int finalTransactionValue = transaction1.getValue(data.getDataId());
+    int finalDataValue = data.dataId;
+    int finalTransactionValue = transaction1.values.get(data.dataId);
     if (finalDataValue == 1 && finalTransactionValue == 42) {
       System.err.println(
           "Lost Update anomaly occurred: finalTransactionValue is 1 and finalTransactionValue is 42");

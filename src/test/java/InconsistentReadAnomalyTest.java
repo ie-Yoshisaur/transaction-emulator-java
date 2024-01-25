@@ -18,16 +18,16 @@ public class InconsistentReadAnomalyTest {
 
     threadPool.submit(() -> {
       transaction2.read(data);
-      int value = transaction2.getValue(data.getDataId());
-      transaction2.write(data.getDataId(), value + 1);
+      int value = transaction2.values.get(data.dataId);
+      transaction2.write(data.dataId, value + 1);
       transaction2.commit();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    int initialValue = transaction1.getInitialState().get(data.getDataId());
-    int finalTransactionValue = transaction1.getValue(data.getDataId());
+    int initialValue = transaction1.initialState.get(data.dataId);
+    int finalTransactionValue = transaction1.values.get(data.dataId);
     if (initialValue == 0 && finalTransactionValue == 1) {
       System.err.println(
           "Inconsistent Read anomaly occurred: initialValue is 0 and finalTransactionValue is 1");

@@ -12,22 +12,22 @@ public class TransactionTest {
 
     threadPool.submit(() -> {
       transaction1.read(data);
-      int currentValue = transaction1.getValue(data.getDataId());
-      transaction1.write(data.getDataId(), currentValue + 1);
+      int currentValue = transaction1.values.get(data.dataId);
+      transaction1.write(data.dataId, currentValue + 1);
       transaction1.commit();
     });
 
     threadPool.submit(() -> {
       transaction2.read(data);
-      int currentValue = transaction2.getValue(data.getDataId());
-      transaction2.write(data.getDataId(), currentValue + 1);
+      int currentValue = transaction2.values.get(data.dataId);
+      transaction2.write(data.dataId, currentValue + 1);
       transaction2.commit();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    assert 2 == data.getValue();
+    assert 2 == data.value;
     System.err.println("data is not 2");
   }
 }

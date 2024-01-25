@@ -19,19 +19,19 @@ public class ReadSkewAnomalyTest {
 
     threadPool.submit(() -> {
       transaction2.read(data1);
-      int value1 = transaction2.getValue(data1.getDataId());
+      int value1 = transaction2.values.get(data1.dataId);
       transaction2.read(data2);
-      transaction2.write(data1.getDataId(), value1 + 1);
-      int value2 = transaction2.getValue(data2.getDataId());
-      transaction2.write(data2.getDataId(), value2 + 1);
+      transaction2.write(data1.dataId, value1 + 1);
+      int value2 = transaction2.values.get(data2.dataId);
+      transaction2.write(data2.dataId, value2 + 1);
       transaction2.rollback();
     });
 
     threadPool.shutdown();
     threadPool.awaitTermination(1, TimeUnit.MINUTES);
 
-    int finalTransaction1Value1 = transaction1.getValue(data1.getDataId());
-    int finalTransaction1Value2 = transaction1.getValue(data2.getDataId());
+    int finalTransaction1Value1 = transaction1.values.get(data1.dataId);
+    int finalTransaction1Value2 = transaction1.values.get(data2.dataId);
     if (finalTransaction1Value1 == 0 && finalTransaction1Value2 == 1) {
       System.err.println(
           "Read Skew Anomaly occurred: finalTransaction1Value1 is 0 and finalTransaction1Value2 is 1");
